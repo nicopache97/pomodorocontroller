@@ -1,0 +1,16 @@
+<%= form_for @pomo , :url => { :action => :create } do |p| %>
+
+
+    <div>
+        <%= p.text_field :nombre%>
+        <%= p.number_field :tim_1 ,  in: 1.0..60.0, step: 1%>
+    </div>
+    <div>
+        <%= p.submit %>
+    </div>
+
+<% end %>
+
+
+
+
