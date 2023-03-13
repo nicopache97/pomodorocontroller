@@ -1,7 +1,16 @@
 
 <%= render template: "layouts/navbar"%>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Tilt+Prism&display=swap');
+</style>
 
 <div class="container-fluid" >
+
+    <div ID="Contenedor-Cronometro" class="container-sm bg-dark text-light row " style="width: 350px; font-family: 'Tilt Prism' ; font-size: 65px" >
+        <p id="horas" class="col container-fluid">3</p>:
+        <p id="minutos" class="col container-fluid ">21</p>:
+        <p id="segundos" class="col container-fluid" >24</p>
+    </div>
 
     <button type="button" class="btn btn-primary">Primary</button>
     <button type="button" class="btn btn-secondary">Secondary</button>
@@ -23,4 +32,64 @@
     <button type="button" class="btn btn-link">Link</button>
 </div >
 
+<script>
+    var actualizarHora = function(){
+        var fecha=new Date();
+        var horas=fecha.getHours();
+        var mins = fecha.getMinutes();
+        var seg= fecha.getSeconds();
 
+        var pHoras=document.getElementById('horas');
+        var pMinutos=document.getElementById('minutos');
+        var pSegundos=document.getElementById('segundos');
+
+
+        pHoras.textContent=horas.toString();
+        if(mins<10){
+            pMinutos.textContent="0"+mins.toString();
+        }else{
+            pMinutos.textContent=mins.toString();
+        }
+        if(seg<10){
+            pSegundos.textContent="0"+seg.toString();
+        }else{
+            pSegundos.textContent=seg.toString();
+        }
+
+}
+
+    actualizarHora();
+    var intervalo = setInterval(actualizarHora, 1000);
+
+/*    var params2 = new URLSearchParams(document.location.search);
+
+    function contratar(){  // Params (Nro auto, horas, usuario, valor)
+        let monto= 1;
+        let check=chequea(Number(auto_in), monto , (barra.value/4) ); // Num de error
+        switch (check){
+        case 0:
+            console.log("El auto no esta ocupado y hay saldo "+location.host);
+            let url = new URL(window.location.origin + "/alquilers");
+            url.searchParams.set("auto",auto_in);
+            url.searchParams.set("mins",(barra.value/4)*60);
+            location.href = url
+            return true;
+            break;
+
+    }
+    function chequea(numAuto,dineroDisp,loUso,precio){ // Devuelve 0 si todo ok
+        if (dineroDisp<precio){ return 2 } // Plata insuficiente
+        
+        if (loUso){ return 3 } // Ya lo uso hace -3h
+    
+        return 0 // Este se puede usar
+    }
+
+    function irHome(){
+        window.location.href = "/";
+    }
+    if (new URLSearchParams(document.location.search).get("notice")!= null){
+        window.alert(new URLSearchParams(document.location.search).get("notice"))
+    }
+*/
+</script>
