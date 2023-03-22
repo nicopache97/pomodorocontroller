@@ -5,14 +5,31 @@
 </style>
 
 <div class="container-fluid" >
-
-    <div ID="Contenedor-Cronometro" class="container-sm bg-dark text-light row " style="width: 350px; font-family: 'Tilt Prism' ; font-size: 65px" >
-        <p id="horas" class="col container-fluid">3</p>:
-        <p id="minutos" class="col container-fluid ">21</p>:
-        <p id="segundos" class="col container-fluid" >24</p>
+<div id='space' style='height: 1em;'></div>
+    <div class="d-flex justify-content-center">
+        <div ID="Contenedor-Hora" class="container-sm bg-dark text-light row " style="width: 360px; font-family: 'Tilt Prism' ; font-size: 65px  ; border-radius: 35px 15px ;" >
+            <p id="h-horas" class="col container-fluid">3</p>:
+            <p id="h-minutos" class="col container-fluid ">21</p>:
+            <p id="h-segundos" class="col container-fluid" >24</p>
+        </div>
     </div>
 
-    <button type="button" class="btn btn-primary">Primary</button>
+<div id='space' style='height: 1em;'></div>
+    
+    <div class="d-flex justify-content-center">
+        <div ID="Contenedor-Cronometro" class="d-flex flex-content bg-dark text-light col-2 " style="width: 370px; font-family: 'Tilt Prism' ; font-size: 65px ; border-radius: 35px 15px;" >
+            <p id="c-horas" class="flex-item p-2 ">3</p>:
+            <p id="c-minutos" class="flex-item p-2 ">21</p>:
+            <p id="c-segundos" class="flex-item p-2 " >24</p>.
+            <p id="c-decimas" class="flex-item align-self-end p-3 " style="font-size: 45px ;">2</p>
+        </div>
+    </div>
+<%= a = audio_tag "alarm1.mp3" , id: "alarm1", autoplay: true, controls: true , mute: true %>
+<%= image_tag "a.jpg" %>
+
+<div id='space' style='height: 6em;'></div>
+
+    <button id="primerBoton" type="button" class="btn btn-primary">Primary</button>
     <button type="button" class="btn btn-secondary">Secondary</button>
     <button type="button" class="btn btn-success">Success</button>
     <button type="button" class="btn btn-danger">Danger</button>
@@ -33,16 +50,70 @@
 </div >
 
 <script>
+
+//variables de actualizarHora
+    var fecha;
+    var Hhoras;
+    var Hmins;
+    var Hseg;
+
     var actualizarHora = function(){
-        var fecha=new Date();
-        var horas=fecha.getHours();
-        var mins = fecha.getMinutes();
-        var seg= fecha.getSeconds();
+        fecha=new Date();
+        Hhoras=fecha.getHours();
+        Hmins = fecha.getMinutes();
+        Hseg= fecha.getSeconds();
 
-        var pHoras=document.getElementById('horas');
-        var pMinutos=document.getElementById('minutos');
-        var pSegundos=document.getElementById('segundos');
+        var pHoras=document.getElementById('h-horas');
+        var pMinutos=document.getElementById('h-minutos');
+        var pSegundos=document.getElementById('h-segundos');
 
+
+        pHoras.textContent=Hhoras.toString();
+        if(Hmins<10){
+            pMinutos.textContent="0"+Hmins.toString();
+        }else{
+            pMinutos.textContent=Hmins.toString();
+        }
+        if(Hseg<10){
+            pSegundos.textContent="0"+Hseg.toString();
+        }else{
+            pSegundos.textContent=Hseg.toString();
+        }
+    }
+
+    var horas=0;
+    var mins=0;
+    var seg=5;
+    var dseg=9;
+
+    var actualizarCronometro = function(){
+
+
+        var pHoras=document.getElementById('c-horas');
+        var pMinutos=document.getElementById('c-minutos');
+        var pSegundos=document.getElementById('c-segundos');
+        var pDSegundos=document.getElementById('c-decimas');
+        
+        dseg--;
+        if(dseg==-1){
+            dseg=9;
+            seg--;
+            if(seg==-1){
+                seg=59;
+                mins--;
+                if (mins==-1){
+                    horas--;
+                    if(horas==-1){
+                        horas=0;
+                        mins=0;
+                        seg=0;
+                        dseg=0;
+                        clearInterval(interval2);
+                        document.getElementById('alarm1').play();
+                    }                
+                }
+            }
+        }
 
         pHoras.textContent=horas.toString();
         if(mins<10){
@@ -55,11 +126,25 @@
         }else{
             pSegundos.textContent=seg.toString();
         }
+        pDSegundos.textContent=dseg.toString();
 
-}
-
+    }
     actualizarHora();
+    actualizarCronometro();
+
     var intervalo = setInterval(actualizarHora, 1000);
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var primerBoton = document.getElementById('primerBoton');
+        primerBoton.onclick = function() {
+            var interval2 = setInterval(actualizarCronometro,100);
+        }; 
+    });
+
+
+
+
 
 /*    var params2 = new URLSearchParams(document.location.search);
 

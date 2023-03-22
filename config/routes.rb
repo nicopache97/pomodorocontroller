@@ -5,4 +5,5 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "pomodoro#index"
   #get 'pomodoro/index' , to: "pomodoro#index"
+  
 end
