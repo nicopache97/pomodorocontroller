@@ -3,7 +3,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.2.1"
 
-# Gema manejo de MP3
+# Gema manejo inicio sesion
+gem 'devise'
 
 # Gema de Bootstrap 5
 gem "bootstrap"
