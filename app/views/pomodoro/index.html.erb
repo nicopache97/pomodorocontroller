@@ -34,15 +34,43 @@
             <button id="min5" type="button" class="border border-dark btn btn-primary">5min</button>
             <button id="min15" type="button" class="border border-dark btn btn-primary">15min</button>
             <button id="min45" type="button" class="border border-dark btn btn-primary">45min</button>
+            <button id="cancel" type="button" class="btn btn-secondary  border border-dark ">cancel</button>
         </div>
-    </div>
-
-<div id='space' style='height: 1em;'></div>
-    <div class="d-flex justify-content-center">
-        <button id="cancel" type="button" class="btn btn-secondary  border border-dark ">cancel</button>
     </div>
 </div >
 
+<% if @historial_data.present? %>
+    <div class="container">
+    <div class="row">
+        <div class="col">
+        <div class="contenedor">
+            <table class="table table-striped">
+            <thead>
+                <tr>
+                <th>Nombre Alarma</th>
+                <th>Fecha Inicio</th>
+                <th>Hora Inicio</th>
+                <th>Duracion</th>
+                <th>Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% @historial_data.each do |alarma| %> <!-- itero por todos los elementos del historial -->
+                <tr>
+                    <td><%= alarma[:nombreAlarma] %></td>
+                    <td><%= alarma[:fechaInicio] %></td>
+                    <td><%= alarma[:horaInicio] %></td>
+                    <td><%= alarma[:duracion] %></td>
+                    <td> <button id="eliminarN" type="button" class="btn btn-dark">Eliminar</button> </td>
+                </tr>
+                <% end %>
+            </tbody>
+            </table>
+        </div>
+        </div>
+    </div>
+    </div>
+<%end%>
 
 <script>
     var alarm1 = new Audio('/audio/alarm1.mp3');
