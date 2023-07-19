@@ -1,18 +1,8 @@
 
 <%= render template: "layouts/navbar"%>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Tilt+Prism&display=swap');
-</style>
+
 
 <div class="container-fluid" >
-
-    <!-- div class="d-flex justify-content-center">
-        <div ID="Contenedor-Hora" class="container-sm bg-dark text-light row " style="width: 360px; font-family: 'Tilt Prism' ; font-size: 65px  ; border-radius: 35px 15px ;" >
-            <p id="h-horas" class="col container-fluid">3</p>:
-            <p id="h-minutos" class="col container-fluid ">21</p>:
-            <p id="h-segundos" class="col container-fluid" >24</p>
-        </div>
-    </div -->
 
     <div class="progress">
         <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
@@ -22,76 +12,88 @@
 <div id='space' style='height: 6em;'></div>
 
     <div class="d-flex justify-content-center">
-        <div ID="Contenedor-Cronometro" class="d-flex flex-content bg-dark text-light col-2 " style="width: 370px; font-family: 'Tilt Prism' ; font-size: 65px ; border-radius: 35px 15px;" >
-            <p id="c-horas" class="flex-item p-2 ">3</p>:
-            <p id="c-minutos" class="flex-item p-2 ">21</p>:
-            <p id="c-segundos" class="flex-item p-2 " >24</p>.
-            <p id="c-decimas" class="flex-item align-self-end p-3 " style="font-size: 45px ;">2</p>
+        <div ID="Contenedor-Cronometro" class="d-flex justify-content-center bg-dark text-light col-2 " style="width: 370px; font-size: 75px ; border-radius: 35px 15px;" >
+            <p id="c-horas" class="flex-item p-3">0</p>:
+            <p id="c-minutos" class="flex-item p-3 ">00</p>:
+            <p id="c-segundos" class="flex-item p-3 " >00</p>
         </div>
 
-            <a id="boton-mute" class="btn">
-                <svg width="40" height="40" fill=#183147 viewBox="0 0 16 16" >
-                    <path id="svg-path" d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
-                </svg>
-            </a>
+        <a id="boton-mute" class="btn">
+            <svg width="40" height="40" fill=#183147 viewBox="0 0 16 16" >
+                <path id="svg-path" d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
+            </svg>
+        </a>
 
     </div>
 
 
 
-<div id='space' style='height: 6em;'></div>
+<div id='space' style='height: 3em;'></div>
+    <div class="d-flex justify-content-center">
+        <div>
+            <button id="min5" type="button" class="border border-dark btn btn-primary">5min</button>
+            <button id="min15" type="button" class="border border-dark btn btn-primary">15min</button>
+            <button id="min45" type="button" class="border border-dark btn btn-primary">45min</button>
+        </div>
+    </div>
 
-    <button id="primerBoton" type="button" class="btn btn-primary">Primary</button>
-    <button type="button" class="btn btn-secondary">Secondary</button>
-    <button type="button" class="btn btn-success">Success</button>
-    <button type="button" class="btn btn-danger">Danger</button>
-    <button type="button" class="btn btn-warning">Warning</button>
-    <button type="button" class="btn btn-info">Info</button>
-    <button type="button" class="btn btn-light">Light</button>
-    <button type="button" class="btn btn-dark">Dark</button>
-    <button type="button" class="btn btn-link">Link</button>
+<div id='space' style='height: 1em;'></div>
+    <div class="d-flex justify-content-center">
+        <button id="cancel" type="button" class="btn btn-secondary  border border-dark ">cancel</button>
+    </div>
 </div >
 
+
 <script>
-/* parametros de la app
-    var bil = <!%=@usuario.monto_actual%>;
-
-    var params = new URLSearchParams(document.location.search);
-    var auto_in = params.get("auto");
-    var mins_in = params.get("mins");
-    var mensaje = params.get("notice");
-    var tex_in = params.get("tex");
-
-        fecha=new Date();
-        Hhoras=fecha.getHours();
-        Hmins = fecha.getMinutes();
-        Hseg= fecha.getSeconds();
-
-        var pHoras=document.getElementById('h-horas');
-*/
     var alarm1 = new Audio('/audio/alarm1.mp3');
 
-const barra = document.querySelector('.progress-bar');
-function actualizarBarra(valor) {
-  barra.style.width = valor + '%';
-  barra.setAttribute('aria-valuenow', valor);
-}
+    const barra = document.querySelector('.progress-bar');
 
-    const HORAS_INICIAL=0;
-    const MINUTOS_INICIAL=5;
-    const SEGUNDOS_INICIAL=5;
-    const DECIMASSEGUNDOS_INICIAL=9;
+    // actualizador de la barra de progreso
+    function actualizarBarra(valor) {
+        barra.style.width = valor + '%';
+        barra.setAttribute('aria-valuenow', valor);
+    }
 
-    var horas=HORAS_INICIAL;
+    var HORAS_INICIAL=0; // valor inicial del contador
+    var MINUTOS_INICIAL=0;
+    var SEGUNDOS_INICIAL=5;
+
+    var horas=HORAS_INICIAL;    // variable lleva la cuenta del tiempo restante 
     var mins=MINUTOS_INICIAL;
     var seg=SEGUNDOS_INICIAL;
-    var dseg=DECIMASSEGUNDOS_INICIAL;
     
+    var pHoras=document.getElementById('c-horas'); // enlazo los parrafos contadores
+    var pMinutos=document.getElementById('c-minutos');
+    var pSegundos=document.getElementById('c-segundos');
+
+    var b5min = document.getElementById('min5');    // enlazo los botones disponibles
+    var b15min = document.getElementById('min15');
+    var b45min = document.getElementById('min45');
+    var bmuted = document.getElementById('boton-mute');
+    var bcancel = document.getElementById('cancel');
+
+    function muestra_botones_contar(){ // funcion mostrar botones que inician el cronometro
+        b5min.removeAttribute("hidden");
+        b15min.removeAttribute("hidden");
+        b45min.removeAttribute("hidden");
+        bcancel.setAttribute("hidden", true);
+    }
+    function oculta_botones_contar(){ // funcion ocultar botones que inician el cronometro
+        b5min.setAttribute("hidden", true);
+        b15min.setAttribute("hidden", true);
+        b45min.setAttribute("hidden", true);
+        bcancel.removeAttribute("hidden");
+    }
+
     var mute=false;
     const pathSvgMute = document.getElementById("svg-path");
     const svgMute="M5.164 14H15c-.299-.199-.557-.553-.78-1-.9-1.8-1.22-5.12-1.22-6 0-.264-.02-.523-.06-.776l-.938.938c.02.708.157 2.154.457 3.58.161.767.377 1.566.663 2.258H6.164l-1 1zm5.581-9.91a3.986 3.986 0 0 0-1.948-1.01L8 2.917l-.797.161A4.002 4.002 0 0 0 4 7c0 .628-.134 2.197-.459 3.742-.05.238-.105.479-.166.718l-1.653 1.653c.02-.037.04-.074.059-.113C2.679 11.2 3 7.88 3 7c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0c.942.19 1.788.645 2.457 1.284l-.707.707zM10 15a2 2 0 1 1-4 0h4zm-9.375.625a.53.53 0 0 0 .75.75l14.75-14.75a.53.53 0 0 0-.75-.75L.625 15.625z";
-    const svgUnMute="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z";
+    const svgUnMute="M8  16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z";
     
+    // swap muted, invierte el muteo
+    // guarda el estado en una variable gloval muted
+    // carga el svg correspondiente al boton de muteo
     var functionMute=function(){
         if(mute){
             pathSvgMute.setAttribute( "d",svgMute);
@@ -102,47 +104,86 @@ function actualizarBarra(valor) {
         }
     }
 
+    // sonar
     var sonar=function(){
         if (!mute){
             alarm1.play();
         }
     }
 
+    // funcion que limpia los numeros del reloj con -:-:-
+    var limpiar=function(){
+        pHoras.textContent="-";
+        pMinutos.textContent="-";
+        pSegundos.textContent="-";
+        actualizarBarra(0);
+    }
+
+
     var interval2 ; // variable de llamado de funcion
-    var iniciarCronometro=function() {
+    function iniciarCronometro5min() {
         if (interval2== null){
-            interval2 = setInterval(actualizarCronometro,100);
+            HORAS_INICIAL=0;
+            MINUTOS_INICIAL=5;
+            SEGUNDOS_INICIAL=1;
+            horas=HORAS_INICIAL;
+            mins=MINUTOS_INICIAL;
+            seg=SEGUNDOS_INICIAL;
+            interval2 = setInterval(actualizarCronometro,1000);
+            oculta_botones_contar();
         }
+    }
+    function iniciarCronometro15min() {
+        if (interval2== null){
+            HORAS_INICIAL=0;
+            MINUTOS_INICIAL=15;
+            SEGUNDOS_INICIAL=1;
+            horas=HORAS_INICIAL;
+            mins=MINUTOS_INICIAL;
+            seg=SEGUNDOS_INICIAL;
+            interval2 = setInterval(actualizarCronometro,1000);
+            oculta_botones_contar();
+        }
+    }
+    function iniciarCronometro45min() {
+        if (interval2== null){
+            HORAS_INICIAL=0;
+            MINUTOS_INICIAL=45;
+            SEGUNDOS_INICIAL=1;
+            horas=HORAS_INICIAL;
+            mins=MINUTOS_INICIAL;
+            seg=SEGUNDOS_INICIAL;
+            interval2 = setInterval(actualizarCronometro,1000);
+            oculta_botones_contar();
+        }
+    }
+    // cancela la cuenta regresiva
+    function cancelar(){
+        clearInterval(interval2);
+        interval2=null; // elimina cronometro que decrementa
+        limpiar(); // borra los numeros
+        muestra_botones_contar(); 
     }
 
     var actualizarCronometro = function(){
-        var pHoras=document.getElementById('c-horas');
-        var pMinutos=document.getElementById('c-minutos');
-        var pSegundos=document.getElementById('c-segundos');
-        var pDSegundos=document.getElementById('c-decimas');
-        
-        dseg--;
-        actualizarBarra(100*(horas*36000+mins*600+seg*10+dseg)/(HORAS_INICIAL*36000+MINUTOS_INICIAL*600+SEGUNDOS_INICIAL*10+DECIMASSEGUNDOS_INICIAL));
-        if(dseg==-1){
-            dseg=9;
-            seg--;
-            if(seg==-1){
-                seg=59;
-                mins--;
-                if (mins==-1){
-                    horas--;
-                    if(horas==-1){
-                        horas=0;
-                        mins=0;
-                        seg=0;
-                        dseg=0;
-                        clearInterval(interval2);
-                        sonar();
-                    }                
-                }
+        actualizarBarra(100*(horas*36000+mins*600+seg*10)/(HORAS_INICIAL*36000+MINUTOS_INICIAL*600+SEGUNDOS_INICIAL*10));
+        seg--;
+        if(seg==-1){
+            seg=59;
+            mins--;
+            if (mins==-1){
+                horas--;
+                if(horas==-1){
+                    horas=0;
+                    mins=0;
+                    seg=0;
+                    dseg=0;
+                    clearInterval(interval2);
+                    sonar();
+                    end();
+                }                
             }
         }
-
         pHoras.textContent=horas.toString();
         if(mins<10){
             pMinutos.textContent="0"+mins.toString();
@@ -154,15 +195,17 @@ function actualizarBarra(valor) {
         }else{
             pSegundos.textContent=seg.toString();
         }
-        pDSegundos.textContent=dseg.toString();
-
     }
-    actualizarCronometro();
 
 
     document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('primerBoton').onclick = iniciarCronometro;
-        document.getElementById('boton-mute').onclick= functionMute;
+        b5min.onclick = iniciarCronometro5min;
+        b15min.onclick = iniciarCronometro15min;
+        b45min.onclick = iniciarCronometro45min;
+        bmuted.onclick= functionMute;
+        bcancel.onclick= cancelar;
+        bcancel.setAttribute("hidden", true);
+        limpiar(); // inicializo la limpieza del reloj
         functionMute();
     });
 
