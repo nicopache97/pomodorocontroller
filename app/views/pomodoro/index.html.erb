@@ -1,80 +1,84 @@
 
-<%= render template: "layouts/navbar"%>
+<div class="container-fluid top-0 bottom-0 left-0 right-0">
 
-
-<div class="container-fluid" >
-
+    <%= render template: "layouts/navbar"%>
+    
     <div class="progress">
         <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
     </div>
 
-
-<div id='space' style='height: 6em;'></div>
+    <div id='space' style='height: 4em;'></div>
 
     <div class="d-flex justify-content-center">
         <div ID="Contenedor-Cronometro" class="d-flex justify-content-center bg-dark text-light col-2 " style="width: 370px; font-size: 75px ; border-radius: 35px 15px;" >
-            <p id="c-horas" class="flex-item p-3">0</p>:
-            <p id="c-minutos" class="flex-item p-3 ">00</p>:
+            <p id="c-horas" class="flex-item p-3">0</p>
+            <p id="dosPuntosA" class="flex-item p-2">:</p>
+            <p id="c-minutos" class="flex-item p-3 ">00</p>
+            <p id="dosPuntosB" class="flex-item p-2">:</p>
             <p id="c-segundos" class="flex-item p-3 " >00</p>
         </div>
-
-        <a id="boton-mute" class="btn">
-            <svg width="40" height="40" fill=#183147 viewBox="0 0 16 16" >
-                <path id="svg-path" d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
-            </svg>
-        </a>
-
     </div>
 
-
-
-<div id='space' style='height: 3em;'></div>
+    <div id='space' style='height: 1em;'></div>
+        
     <div class="d-flex justify-content-center">
-        <div>
-            <button id="min5" type="button" class="border border-dark btn btn-primary">5min</button>
-            <button id="min15" type="button" class="border border-dark btn btn-primary">15min</button>
-            <button id="min45" type="button" class="border border-dark btn btn-primary">45min</button>
-            <button id="cancel" type="button" class="btn btn-secondary  border border-dark ">cancel</button>
+        <div class="d-flex">
+            <div>
+                <button id="min5" type="button" class="border border-dark btn btn-primary">5min</button>
+                <button id="min15" type="button" class="border border-dark btn btn-primary">15min</button>
+                <button id="min45" type="button" class="border border-dark btn btn-primary">45min</button>
+                <button id="cancel" type="button" class="btn btn-secondary  border border-dark ">cancel</button>
+            </div>
+            <div id='space-ancho' style='width: 10em;'></div>
+            <a id="boton-mute" class="btn">
+                <svg width="40" height="40" fill=#183147 viewBox="0 0 16 16" >
+                    <path id="svg-path" d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
+                </svg>
+            </a>
         </div>
-    </div>
-</div >
+    </div >
 
-<% if @historial_data.present? %>
-    <div class="container">
-    <div class="row">
-        <div class="col">
-        <div class="contenedor">
-            <table class="table table-striped">
-            <thead>
-                <tr>
-                <th>Nombre Alarma</th>
-                <th>Fecha Inicio</th>
-                <th>Hora Inicio</th>
-                <th>Duracion</th>
-                <th>Eliminar</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% @historial_data.each do |alarma| %> <!-- itero por todos los elementos del historial -->
-                <tr>
-                    <td><%= alarma[:nombreAlarma] %></td>
-                    <td><%= alarma[:fechaInicio] %></td>
-                    <td><%= alarma[:horaInicio] %></td>
-                    <td><%= alarma[:duracion] %></td>
-                    <td> <button id="eliminarN" type="button" class="btn btn-dark">Eliminar</button> </td>
-                </tr>
-                <% end %>
-            </tbody>
-            </table>
+    <% if @historial_data.present? %>
+        <div id='space' style='height: 2em;'></div>
+        
+        <div class="container d-flex justify-content-center">
+            <div class="row">
+                <div class="col">
+                <div class="contenedor">
+                    <table class="table table-striped">
+                    <thead>
+                        <tr>
+                        <th>Nombre Alarma</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Duracion</th>
+                        <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% @historial_data.each do |alarma| %> <!-- itero por todos los elementos del historial -->
+                        <tr>
+                            <td><%= alarma[:nombre] %></td>
+                            <td><%= alarma[:fecha_inicio] %></td>
+                            <td><%= alarma[:hora_inicio].strftime("%I:%M %p") %></td>
+                            <% if alarma[:finalizo].nil? %>
+                                <td><%= alarma[:duracion] %></td>
+                            <% else %>
+                                <td style="color: <%= alarma[:finalizo] ? 'green' : 'red' %>;" > <%= alarma[:duracion] %></td>
+                            <% end %>
+                            <td> <button id="eliminar(<%=alarma[:id]%>)" type="button" class="btn btn-dark"> x </button> </td>
+                        </tr>
+                        <% end %>
+                    </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
         </div>
-        </div>
-    </div>
-    </div>
-<%end%>
-
+    <%end%>
+</div>
 <script>
-    var alarm1 = new Audio('/audio/alarm1.mp3');
-
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const barra = document.querySelector('.progress-bar');
 
     // actualizador de la barra de progreso
@@ -90,9 +94,13 @@
     var horas=HORAS_INICIAL;    // variable lleva la cuenta del tiempo restante 
     var mins=MINUTOS_INICIAL;
     var seg=SEGUNDOS_INICIAL;
+
+    var alarm1 = new Audio('/audio/alarm1.mp3');
     
     var pHoras=document.getElementById('c-horas'); // enlazo los parrafos contadores
+    var pPuntoA=document.getElementById('dosPuntosA');
     var pMinutos=document.getElementById('c-minutos');
+    var pPuntoB=document.getElementById('dosPuntosB');
     var pSegundos=document.getElementById('c-segundos');
 
     var b5min = document.getElementById('min5');    // enlazo los botones disponibles
@@ -100,18 +108,23 @@
     var b45min = document.getElementById('min45');
     var bmuted = document.getElementById('boton-mute');
     var bcancel = document.getElementById('cancel');
+    var pEspacioAncho=document.getElementById('space-ancho');
 
     function muestra_botones_contar(){ // funcion mostrar botones que inician el cronometro
         b5min.removeAttribute("hidden");
         b15min.removeAttribute("hidden");
         b45min.removeAttribute("hidden");
         bcancel.setAttribute("hidden", true);
+        pEspacioAncho.setAttribute("hidden", true);
+        bmuted.setAttribute("hidden", true);
     }
     function oculta_botones_contar(){ // funcion ocultar botones que inician el cronometro
         b5min.setAttribute("hidden", true);
         b15min.setAttribute("hidden", true);
         b45min.setAttribute("hidden", true);
         bcancel.removeAttribute("hidden");
+        pEspacioAncho.removeAttribute("hidden");
+        bmuted.removeAttribute("hidden");
     }
 
     var mute=false;
@@ -122,7 +135,7 @@
     // swap muted, invierte el muteo
     // guarda el estado en una variable gloval muted
     // carga el svg correspondiente al boton de muteo
-    var functionMute=function(){
+    function functionMute(){
         if(mute){
             pathSvgMute.setAttribute( "d",svgMute);
             mute=false;
@@ -133,68 +146,80 @@
     }
 
     // sonar
-    var sonar=function(){
+    function sonar(){
         if (!mute){
             alarm1.play();
         }
     }
 
     // funcion que limpia los numeros del reloj con -:-:-
-    var limpiar=function(){
+    function limpiar(){
         pHoras.textContent="-";
         pMinutos.textContent="-";
         pSegundos.textContent="-";
+        pHoras.removeAttribute("hidden");
+        pPuntoA.removeAttribute("hidden");
         actualizarBarra(0);
+        muestra_botones_contar();
     }
+    function inicializaReloj(hh,mm,ss){
+        HORAS_INICIAL=hh;
+        MINUTOS_INICIAL=mm;
+        SEGUNDOS_INICIAL=ss;
+        horas=hh;
+        mins=mm;
+        seg =ss;
+        if(hh==0){
+            pHoras.setAttribute("hidden", true);
+            pPuntoA.setAttribute("hidden", true);
+        }
+    }
+    function iniciarCuenta(duracionCronos){
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '<%= cronos_path %>');
+        xhr.setRequestHeader('Content-Type', 'application/json');
 
+        var data = {
+        crono: {
+            nombre: 'Nombre del Crono',
+            fecha_inicio: new Date().toISOString().slice(0, 10) ,
+            hora_inicio: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            duracion: duracionCronos,
+            finalizo: null,
+        }
+        };
+        xhr.setRequestHeader('X-CSRF-Token', csrfToken);
+        xhr.send(JSON.stringify(data));
+    }
 
     var interval2 ; // variable de llamado de funcion
-    function iniciarCronometro5min() {
+
+    function iniciarCronometro5min() {        iniciarCronometro(0,5,0,true);
+    }
+    function iniciarCronometro15min() {        iniciarCronometro(0,15,0,true);
+    }
+    function iniciarCronometro45min() {        iniciarCronometro(0,45,0,true);
+    }
+    function iniciarCronometro(hh,mm,ss,nuevo_cronometro) {
         if (interval2== null){
-            HORAS_INICIAL=0;
-            MINUTOS_INICIAL=5;
-            SEGUNDOS_INICIAL=1;
-            horas=HORAS_INICIAL;
-            mins=MINUTOS_INICIAL;
-            seg=SEGUNDOS_INICIAL;
+            inicializaReloj(hh,mm,ss+1);
             interval2 = setInterval(actualizarCronometro,1000);
             oculta_botones_contar();
+            if (nuevo_cronometro){  // si es un nuevo cuenta de cronometro mando la info al servidor
+                iniciarCuenta(mm);
+            }
         }
     }
-    function iniciarCronometro15min() {
-        if (interval2== null){
-            HORAS_INICIAL=0;
-            MINUTOS_INICIAL=15;
-            SEGUNDOS_INICIAL=1;
-            horas=HORAS_INICIAL;
-            mins=MINUTOS_INICIAL;
-            seg=SEGUNDOS_INICIAL;
-            interval2 = setInterval(actualizarCronometro,1000);
-            oculta_botones_contar();
-        }
-    }
-    function iniciarCronometro45min() {
-        if (interval2== null){
-            HORAS_INICIAL=0;
-            MINUTOS_INICIAL=45;
-            SEGUNDOS_INICIAL=1;
-            horas=HORAS_INICIAL;
-            mins=MINUTOS_INICIAL;
-            seg=SEGUNDOS_INICIAL;
-            interval2 = setInterval(actualizarCronometro,1000);
-            oculta_botones_contar();
-        }
-    }
+
     // cancela la cuenta regresiva
     function cancelar(){
         clearInterval(interval2);
         interval2=null; // elimina cronometro que decrementa
         limpiar(); // borra los numeros
-        muestra_botones_contar(); 
     }
 
+    // funcion principal decrementar cronometro
     var actualizarCronometro = function(){
-        actualizarBarra(100*(horas*36000+mins*600+seg*10)/(HORAS_INICIAL*36000+MINUTOS_INICIAL*600+SEGUNDOS_INICIAL*10));
         seg--;
         if(seg==-1){
             seg=59;
@@ -205,36 +230,60 @@
                     horas=0;
                     mins=0;
                     seg=0;
-                    dseg=0;
                     clearInterval(interval2);
+                    interval2=null;
                     sonar();
-                    end();
+                    limpiar();
                 }                
             }
         }
-        pHoras.textContent=horas.toString();
-        if(mins<10){
-            pMinutos.textContent="0"+mins.toString();
-        }else{
-            pMinutos.textContent=mins.toString();
-        }
-        if(seg<10){
-            pSegundos.textContent="0"+seg.toString();
-        }else{
-            pSegundos.textContent=seg.toString();
+        actualizarBarra(100*(horas*36000+mins*600+seg*10)/(HORAS_INICIAL*36000+MINUTOS_INICIAL*600+SEGUNDOS_INICIAL*10));
+        if(interval2!=null){ // actualizo los numeros, cuando la cuenta regresiva no termino
+            if(horas!=0){
+                pHoras.textContent=horas.toString();
+            }
+            if(mins<10){
+                pMinutos.textContent="0"+mins.toString();
+            }else{
+                pMinutos.textContent=mins.toString();
+            }
+            if(seg<10){
+                pSegundos.textContent="0"+seg.toString();
+            }else{
+                pSegundos.textContent=seg.toString();
+            }
         }
     }
 
+    // verifica si hay una cuenta pomodoro corriendo
+    function restaurarSecion(){
+        var primerElemento = <%= @historial_data.present? ? @historial_data.first.to_json.html_safe : 'null' %>;
 
+        if (primerElemento !== null ) {
+            var horaInicio = new Date(primerElemento.fecha_inicio + 'T' + primerElemento.hora_inicio);
+            var duracionEnMilisegundos = primerElemento.duracion * 60 * 1000; // Convertir la duración de minutos a milisegundos
+            var horaFin = new Date(horaInicio.getTime() + duracionEnMilisegundos);
+            var horaActual = new Date();
+
+            if (horaFin.getTime() > horaActual.getTime()) {
+                iniciarCronometro(horaFin.getHoras(),horaFin.getMinutes(),horaFin.getSeconds());
+            }
+        }
+
+    }
+
+    // cuando la pagina esta completamente cargada,sin errores
+    // , se enlazan los botones a sus acciones correspondientes
     document.addEventListener('DOMContentLoaded', function() {
         b5min.onclick = iniciarCronometro5min;
         b15min.onclick = iniciarCronometro15min;
         b45min.onclick = iniciarCronometro45min;
         bmuted.onclick= functionMute;
         bcancel.onclick= cancelar;
-        bcancel.setAttribute("hidden", true);
+        muestra_botones_contar(); // oculta el boton de cancelar
         limpiar(); // inicializo la limpieza del reloj
         functionMute();
+        restaurarSecion();
     });
 
 </script>

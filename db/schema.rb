@@ -10,10 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_02_224018) do
-  create_table "pomodoros", force: :cascade do |t|
+ActiveRecord::Schema[7.0].define(version: 2023_07_20_182520) do
+  create_table "cronos", force: :cascade do |t|
     t.string "nombre"
-    t.float "tim_1"
+    t.date "fecha_inicio"
+    t.integer "user_id"
+    t.time "hora_inicio"
+    t.integer "duracion"
+    t.boolean "finalizo"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
