@@ -16,7 +16,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_20_182520) do
     t.date "fecha_inicio"
     t.integer "user_id"
     t.time "hora_inicio"
-    t.integer "duracion"
+    t.time "duracion"
     t.boolean "finalizo"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

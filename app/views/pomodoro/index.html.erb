@@ -64,9 +64,9 @@
                             <% if alarma[:finalizo].nil? %>
                                 <td><%= alarma[:duracion] %></td>
                             <% else %>
-                                <td style="color: <%= alarma[:finalizo] ? 'green' : 'red' %>;" > <%= alarma[:duracion] %></td>
+                                <td style="color: <%= alarma[:finalizo] ? 'green' : 'red' %>;" > <%= alarma[:duracion].hour.zero? ? alarma[:duracion].strftime("%M:%S") : alarma[:duracion].strftime("%H:%M:%S") %></td>
                             <% end %>
-                            <td> <button id="eliminar(<%=alarma[:id]%>)" type="button" class="btn btn-dark"> x </button> </td>
+                            <td> <button id="eliminar(<%=alarma[:id]%>)" type="button" class="btn btn-dark"> x<%=alarma[:id]%> </button> </td>
                         </tr>
                         <% end %>
                     </tbody>
@@ -77,6 +77,7 @@
         </div>
     <%end%>
 </div>
+
 <script>
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const barra = document.querySelector('.progress-bar');
@@ -178,17 +179,41 @@
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '<%= cronos_path %>');
         xhr.setRequestHeader('Content-Type', 'application/json');
-
+        xhr.setRequestHeader('X-CSRF-Token', csrfToken);
         var data = {
         crono: {
             nombre: 'Nombre del Crono',
             fecha_inicio: new Date().toISOString().slice(0, 10) ,
-            hora_inicio: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            hora_inicio: new Date().toISOString().substr(11, 8),
             duracion: duracionCronos,
             finalizo: null,
         }
         };
+        xhr.send(JSON.stringify(data));
+    }
+
+    /**
+     * Actualiza los atributos 'finalizo' y 'duracion' de un cronos específico mediante una solicitud AJAX.
+     * @param {number} cronoId - El ID del cronos que se desea modificar.
+     * @param {boolean} finalizo - El nuevo valor para el atributo 'finalizo'.
+     * @param {number} duracionMinutos - La nueva duración en minutos que se desea asignar.
+     */
+    function actualizarCrono(cronoId, finalizo, duracionMinutos) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('PATCH', '<%= cronos_path %>' + '/' + cronoId+'/actualizar');
+        xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.setRequestHeader('X-CSRF-Token', csrfToken);
+
+        // Convertir los minutos a un formato de Time adecuado (hh:mm:ss)
+        var duracionTime = new Date(duracionMinutos * 60000).toISOString().substr(11, 8);
+
+        var data = {
+            crono: {
+            finalizo: finalizo,
+            duracion: duracionMinutos,
+            }
+        };
+
         xhr.send(JSON.stringify(data));
     }
 
@@ -216,6 +241,9 @@
         clearInterval(interval2);
         interval2=null; // elimina cronometro que decrementa
         limpiar(); // borra los numeros
+        if (<%= @user_id %> !==null){ // si el usuario esta logueado, manda a cancelar el cronometro
+            actualizarCrono(42,false,2);
+        }
     }
 
     // funcion principal decrementar cronometro

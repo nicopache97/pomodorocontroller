@@ -5,7 +5,7 @@ class CreateCronos < ActiveRecord::Migration[7.0]
       t.date    :fecha_inicio
       t.integer :user_id
       t.time    :hora_inicio
-      t.integer :duracion
+      t.time    :duracion
       t.boolean :finalizo
 
       t.timestamps
