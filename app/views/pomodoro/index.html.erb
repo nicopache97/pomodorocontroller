@@ -62,10 +62,9 @@
                             <td><%= alarma[:fecha_inicio] %></td>
                             <td><%= alarma[:hora_inicio].strftime("%I:%M %p") %></td>
                             <% if alarma[:finalizo].nil? %>
-                                <td><%= alarma[:duracion] %></td>
-                            <% else %>
-                                <td style="color: <%= alarma[:finalizo] ? 'green' : 'red' %>;" > <%= alarma[:duracion].hour.zero? ? alarma[:duracion].strftime("%M:%S") : alarma[:duracion].strftime("%H:%M:%S") %></td>
+                                <td>    <% else %>    <td style="color: <%= alarma[:finalizo] ? 'green' : 'red' %>;" > 
                             <% end %>
+                                    <%= alarma[:duracion].hour.zero? ? alarma[:duracion].strftime("%M:%S") : alarma[:duracion].strftime("%H:%M:%S") %></td>
                             <td> <button id="eliminar(<%=alarma[:id]%>)" type="button" class="btn btn-dark"> x<%=alarma[:id]%> </button> </td>
                         </tr>
                         <% end %>
@@ -87,6 +86,9 @@
         barra.style.width = valor + '%';
         barra.setAttribute('aria-valuenow', valor);
     }
+    var isUserRegistered = <%= @user_name.present? ? 'true' : 'false' %>;
+    var user_name = "<%= @user_name%>";
+    var isrestore= <%= @historial_data.present? ? 'true' : 'false'  %>
 
     var HORAS_INICIAL=0; // valor inicial del contador
     var MINUTOS_INICIAL=0;
@@ -163,18 +165,61 @@
         actualizarBarra(0);
         muestra_botones_contar();
     }
-    function inicializaReloj(hh,mm,ss){
-        HORAS_INICIAL=hh;
-        MINUTOS_INICIAL=mm;
-        SEGUNDOS_INICIAL=ss;
+    function setReloj(H,M,S,hh,mm,ss){
+        HORAS_INICIAL=H;
+        MINUTOS_INICIAL=M;
+        SEGUNDOS_INICIAL=S;
         horas=hh;
         mins=mm;
         seg =ss;
+    }
+    function inicializaReloj(hh,mm,ss){
+        setReloj(hh,mm,ss,hh,mm,ss);
         if(hh==0){
             pHoras.setAttribute("hidden", true);
             pPuntoA.setAttribute("hidden", true);
         }
     }
+    /**
+     * Verifica si el cronómetro actual todavía tiene tiempo restante.
+     * @param {string} fechaInicio - La fecha de inicio del cronómetro en formato ISO (yyyy-mm-dd).
+     * @param {string} duracion - La duración del cronómetro en formato "hh:mm:ss".
+     * @returns {boolean} - Retorna true si el cronómetro tiene tiempo restante, de lo contrario, retorna false.
+     */
+    function quedaTiempoRestante(fechaInicio, duracion) {
+        var fechaActual = new Date().toISOString().slice(0, 10);
+        var horaActual = new Date().getTime();
+        var horaInicio = new Date(fechaInicio + 'T' + duracion).getTime();
+        return ( horaInicio - horaActual) > 0;
+    }
+
+    /**
+     * Función principal para verificar si el cronómetro actual todavía tiene tiempo restante y obtener el tiempo restante.
+     * @param {Object[]} historialData - Un array con los datos del historial de cronómetros.
+     * @returns {Object} - Retorna un objeto con dos propiedades: "isRestore" (booleano) y "tiempoRestante" (string).
+     */
+    function restauraCronometro(ultimoCronometro) {
+        if (ultimoCronometro) {           
+            // Verificar si el cronómetro actual todavía tiene tiempo restante
+            if (ultimoCronometro && ultimoCronometro.fecha_inicio && ultimoCronometro.duracion && ultimoCronometro.hora_inicio) {
+                if (quedaTiempoRestante(ultimoCronometro.fecha_inicio, ultimoCronometro.duracion)) {
+                    // Calcular el tiempo restante del cronómetro actual
+                    var horaActual = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                    var horaInicio = ultimoCronometro.hora_inicio;
+                    
+                    var tiempoRestanteEnMilisegundos = new Date(ultimoCronometro.fecha_inicio + 'T' + horaInicio).getTime() - new Date().getTime();
+                    var segundosRestantes = Math.floor(tiempoRestanteEnMilisegundos / 1000);
+                    var minutosRestantes = Math.floor(segundosRestantes / 60);
+                    var segundosRestantes = segundosRestantes % 60;
+                    var horasRestantes = Math.floor(minutosRestantes / 60);
+                    var minutosRestantes = minutosRestantes % 60;
+                    setReloj(ultimoCronometro.fecha_inicio.getHours(),ultimoCronometro.fecha_inicio.getMinutes(),ultimoCronometro.fecha_inicio.getSeconds(),horasRestantes,minutosRestantes,segundosRestantes);
+                    iniciarCronometro(horasRestantes,minutosRestantes,segundosRestantes,false);
+                }
+            }
+        }
+    }
+
     function iniciarCuenta(duracionCronos){
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '<%= cronos_path %>');
@@ -185,7 +230,7 @@
             nombre: 'Nombre del Crono',
             fecha_inicio: new Date().toISOString().slice(0, 10) ,
             hora_inicio: new Date().toISOString().substr(11, 8),
-            duracion: duracionCronos,
+            duracion: new Date(duracionCronos * 60000).toISOString().substr(11, 8),
             finalizo: null,
         }
         };
@@ -241,7 +286,7 @@
         clearInterval(interval2);
         interval2=null; // elimina cronometro que decrementa
         limpiar(); // borra los numeros
-        if (<%= @user_id %> !==null){ // si el usuario esta logueado, manda a cancelar el cronometro
+        if (usuarioLogeado){ // si el usuario esta logueado, manda a cancelar el cronometro
             actualizarCrono(42,false,2);
         }
     }
@@ -283,23 +328,6 @@
         }
     }
 
-    // verifica si hay una cuenta pomodoro corriendo
-    function restaurarSecion(){
-        var primerElemento = <%= @historial_data.present? ? @historial_data.first.to_json.html_safe : 'null' %>;
-
-        if (primerElemento !== null ) {
-            var horaInicio = new Date(primerElemento.fecha_inicio + 'T' + primerElemento.hora_inicio);
-            var duracionEnMilisegundos = primerElemento.duracion * 60 * 1000; // Convertir la duración de minutos a milisegundos
-            var horaFin = new Date(horaInicio.getTime() + duracionEnMilisegundos);
-            var horaActual = new Date();
-
-            if (horaFin.getTime() > horaActual.getTime()) {
-                iniciarCronometro(horaFin.getHoras(),horaFin.getMinutes(),horaFin.getSeconds());
-            }
-        }
-
-    }
-
     // cuando la pagina esta completamente cargada,sin errores
     // , se enlazan los botones a sus acciones correspondientes
     document.addEventListener('DOMContentLoaded', function() {
@@ -311,7 +339,7 @@
         muestra_botones_contar(); // oculta el boton de cancelar
         limpiar(); // inicializo la limpieza del reloj
         functionMute();
-        restaurarSecion();
+        restauraCronometro(<%== @historial_data.last.to_json %>); // restauro el ultimo contador valido, si existe
     });
 
 </script>

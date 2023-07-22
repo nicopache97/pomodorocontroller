@@ -5,6 +5,7 @@ class PomodoroController < ApplicationController
     if current_user.present?
       @historial_data = current_user.cronos.order(id: :desc)
       @user_id = current_user.id;
+      @user_name =current_user.nombre;
     end
     
     #cookies[:user_id] = {
