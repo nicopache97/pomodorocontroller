@@ -13,13 +13,27 @@ class CronosController < ApplicationController
     end
   end
 
-  def update
-    @crono = Crono.find(params[:id])
-    
-    if @crono.update(crono_actualiza_params)
-      render json: { status: 'success', message: 'Crono actualizado exitosamente' }
+  def actualizarUltimoCrono
+    if current_user.nil? 
     else
-      render json: { status: 'error', message: @crono.errors.full_messages.join(', ') }
+        @crono = current_user.cronos.last
+      if @crono.update(crono_actualiza_params)
+        render json: { status: 'success', message: 'Crono actualizado exitosamente' }
+      else
+        render json: { status: 'error', message: @crono.errors.full_messages.join(', ') }
+      end
+    end
+  end
+
+  def update
+    if current_user.nil? || params[:id].nil?
+    else
+        @crono = Crono.find(params[:id])
+      if @crono.update(crono_actualiza_params)
+        render json: { status: 'success', message: 'Crono actualizado exitosamente' }
+      else
+        render json: { status: 'error', message: @crono.errors.full_messages.join(', ') }
+      end
     end
   end
 

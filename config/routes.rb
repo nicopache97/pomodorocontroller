@@ -7,10 +7,12 @@ Rails.application.routes.draw do
   root "pomodoro#index"
   #get 'pomodoro/index' , to: "pomodoro#index"
   post '/cronos', to: 'cronos#create'
-  resources :cronos, only: [:create] do
+  resources :cronos, only: [:create, :update] do
     member do
       patch 'actualizar', to: 'cronos#update'
     end
+    patch 'actualizarUltimo', to: 'cronos#actualizarUltimoCrono', on: :collection
   end
+
 
 end

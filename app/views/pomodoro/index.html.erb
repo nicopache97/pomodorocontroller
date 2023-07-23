@@ -1,4 +1,7 @@
 
+
+<%= stylesheet_link_tag 'cronos', 'data-turbolinks-track': 'reload' %> 
+
 <div class="container-fluid top-0 bottom-0 left-0 right-0">
 
     <%= render template: "layouts/navbar"%>
@@ -10,14 +13,16 @@
     <div id='space' style='height: 4em;'></div>
 
     <div class="d-flex justify-content-center">
-        <div ID="Contenedor-Cronometro" class="d-flex justify-content-center bg-dark text-light col-2 " style="width: 370px; font-size: 75px ; border-radius: 35px 15px;" >
+        <input id="nombreCrono" type="text" class="justify-content-center nombre-crono" placeholder="¿Qué vamos a estudiar hoy?" >
+        <div id="Contenedor-Cronometro" class="d-flex justify-content-center bg-dark text-light col-2 cronometro" style="width: 370px; font-size: 75px; border-radius: 35px 15px;">
             <p id="c-horas" class="flex-item p-3">0</p>
             <p id="dosPuntosA" class="flex-item p-2">:</p>
-            <p id="c-minutos" class="flex-item p-3 ">00</p>
+            <p id="c-minutos" class="flex-item p-3">00</p>
             <p id="dosPuntosB" class="flex-item p-2">:</p>
-            <p id="c-segundos" class="flex-item p-3 " >00</p>
+            <p id="c-segundos" class="flex-item p-3">00</p>
         </div>
     </div>
+
 
     <div id='space' style='height: 1em;'></div>
         
@@ -37,6 +42,8 @@
             </a>
         </div>
     </div >
+    <p id="espacioTester1"></p>
+    <p id="espacioTester2"></p>
 
     <% if @historial_data.present? %>
         <div id='space' style='height: 2em;'></div>
@@ -86,7 +93,7 @@
         barra.style.width = valor + '%';
         barra.setAttribute('aria-valuenow', valor);
     }
-    var isUserRegistered = <%= @user_name.present? ? 'true' : 'false' %>;
+    var usuarioLogeado = <%= @user_name.present? ? 'true' : 'false' %>;
     var user_name = "<%= @user_name%>";
     var isrestore= <%= @historial_data.present? ? 'true' : 'false'  %>
 
@@ -105,6 +112,8 @@
     var pMinutos=document.getElementById('c-minutos');
     var pPuntoB=document.getElementById('dosPuntosB');
     var pSegundos=document.getElementById('c-segundos');
+    var pNombreCrono=document.getElementById('nombreCrono');
+    var pCrono=document.getElementById('Contenedor-Cronometro');
 
     var b5min = document.getElementById('min5');    // enlazo los botones disponibles
     var b15min = document.getElementById('min15');
@@ -112,11 +121,15 @@
     var bmuted = document.getElementById('boton-mute');
     var bcancel = document.getElementById('cancel');
     var pEspacioAncho=document.getElementById('space-ancho');
+    var ptest1=document.getElementById('espacioTester1');
+    var ptest2=document.getElementById('espacioTester2');
 
     function muestra_botones_contar(){ // funcion mostrar botones que inician el cronometro
         b5min.removeAttribute("hidden");
         b15min.removeAttribute("hidden");
         b45min.removeAttribute("hidden");
+        pNombreCrono.removeAttribute("hidden");
+        pCrono.setAttribute("hidden", true);
         bcancel.setAttribute("hidden", true);
         pEspacioAncho.setAttribute("hidden", true);
         bmuted.setAttribute("hidden", true);
@@ -125,6 +138,8 @@
         b5min.setAttribute("hidden", true);
         b15min.setAttribute("hidden", true);
         b45min.setAttribute("hidden", true);
+        pNombreCrono.setAttribute("hidden", true);
+        pCrono.removeAttribute("hidden");
         bcancel.removeAttribute("hidden");
         pEspacioAncho.removeAttribute("hidden");
         bmuted.removeAttribute("hidden");
@@ -190,24 +205,21 @@
         var fechaActual = new Date().toISOString().slice(0, 10);
         var horaActual = new Date().getTime();
         var horaInicio = new Date(fechaInicio + 'T' + duracion).getTime();
-        return ( horaInicio - horaActual) > 0;
+        return ( ( horaInicio - horaActual) > 0) ;
     }
 
     /**
      * Función principal para verificar si el cronómetro actual todavía tiene tiempo restante y obtener el tiempo restante.
-     * @param {Object[]} historialData - Un array con los datos del historial de cronómetros.
-     * @returns {Object} - Retorna un objeto con dos propiedades: "isRestore" (booleano) y "tiempoRestante" (string).
+     * @param {Object[]} ultimoCronometro - el historial de cronómetro de la BD.
      */
     function restauraCronometro(ultimoCronometro) {
         if (ultimoCronometro) {           
             // Verificar si el cronómetro actual todavía tiene tiempo restante
             if (ultimoCronometro && ultimoCronometro.fecha_inicio && ultimoCronometro.duracion && ultimoCronometro.hora_inicio) {
                 if (quedaTiempoRestante(ultimoCronometro.fecha_inicio, ultimoCronometro.duracion)) {
-                    // Calcular el tiempo restante del cronómetro actual
-                    var horaActual = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
                     var horaInicio = ultimoCronometro.hora_inicio;
-                    
-                    var tiempoRestanteEnMilisegundos = new Date(ultimoCronometro.fecha_inicio + 'T' + horaInicio).getTime() - new Date().getTime();
+                    var tiempoRestanteEnMilisegundos = new Date(ultimoCronometro.fecha_inicio + 'T' + ultimoCronometro.hora_inicio).getTime() - new Date().getTime();
                     var segundosRestantes = Math.floor(tiempoRestanteEnMilisegundos / 1000);
                     var minutosRestantes = Math.floor(segundosRestantes / 60);
                     var segundosRestantes = segundosRestantes % 60;
@@ -220,17 +232,17 @@
         }
     }
 
-    function iniciarCuenta(duracionCronos){
+    function iniciarCuenta(cronoMinitos,cronoSegundos){
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '<%= cronos_path %>');
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.setRequestHeader('X-CSRF-Token', csrfToken);
         var data = {
         crono: {
-            nombre: 'Nombre del Crono',
-            fecha_inicio: new Date().toISOString().slice(0, 10) ,
-            hora_inicio: new Date().toISOString().substr(11, 8),
-            duracion: new Date(duracionCronos * 60000).toISOString().substr(11, 8),
+            nombre: pNombreCrono.value.trim() === '' ? 'estudio' : pNombreCrono.value,
+            fecha_inicio: new Date(),//.toISOString().slice(0, 10) ,
+            hora_inicio: new Date(),//.toISOString().substr(11, 8),
+            duracion: new Date((cronoMinitos*60+cronoSegundos)*1000).toISOString().substr(11, 8), // solo me quedo con la hora
             finalizo: null,
         }
         };
@@ -241,26 +253,45 @@
      * Actualiza los atributos 'finalizo' y 'duracion' de un cronos específico mediante una solicitud AJAX.
      * @param {number} cronoId - El ID del cronos que se desea modificar.
      * @param {boolean} finalizo - El nuevo valor para el atributo 'finalizo'.
-     * @param {number} duracionMinutos - La nueva duración en minutos que se desea asignar.
+     * @param {number} duracionMilliSegundos - La nueva duración en minutos que se desea asignar.
      */
-    function actualizarCrono(cronoId, finalizo, duracionMinutos) {
+    function actualizarCrono(cronoId, finalizo, duracionMilliSegundos) {
         var xhr = new XMLHttpRequest();
         xhr.open('PATCH', '<%= cronos_path %>' + '/' + cronoId+'/actualizar');
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.setRequestHeader('X-CSRF-Token', csrfToken);
 
-        // Convertir los minutos a un formato de Time adecuado (hh:mm:ss)
-        var duracionTime = new Date(duracionMinutos * 60000).toISOString().substr(11, 8);
-
         var data = {
             crono: {
             finalizo: finalizo,
-            duracion: duracionMinutos,
+            duracion: new Date(duracionMilliSegundos).toISOString().substr(11, 8),
             }
         };
 
         xhr.send(JSON.stringify(data));
     }
+
+    /**
+     * Actualiza los atributos 'finalizo' y 'duracion' del ultimo cronos mediante una solicitud AJAX.
+     * @param {boolean} finalizo - El nuevo valor para el atributo 'finalizo'.
+     * @param {number} duracionMilliSegundos - La nueva duración en minutos que se desea asignar.
+     */
+    function actualizarUltimoCrono( finalizo, duracionMilliSegundos) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('PATCH', '<%= cronos_path %>' +'/actualizarUltimo');
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.setRequestHeader('X-CSRF-Token', csrfToken);
+
+        var data = {
+            crono: {
+            finalizo: finalizo,
+            duracion: new Date(duracionMilliSegundos).toISOString().substr(11, 8),
+            }
+        };
+
+        xhr.send(JSON.stringify(data));
+    }
+
 
     var interval2 ; // variable de llamado de funcion
 
@@ -276,7 +307,7 @@
             interval2 = setInterval(actualizarCronometro,1000);
             oculta_botones_contar();
             if (nuevo_cronometro){  // si es un nuevo cuenta de cronometro mando la info al servidor
-                iniciarCuenta(mm);
+                iniciarCuenta(mm,ss);
             }
         }
     }
@@ -287,7 +318,7 @@
         interval2=null; // elimina cronometro que decrementa
         limpiar(); // borra los numeros
         if (usuarioLogeado){ // si el usuario esta logueado, manda a cancelar el cronometro
-            actualizarCrono(42,false,2);
+            actualizarUltimoCrono(false, ( (MINUTOS_INICIAL*60+SEGUNDOS_INICIAL)-(mins*60+seg) )*1000);
         }
     }
 
@@ -326,8 +357,15 @@
                 pSegundos.textContent=seg.toString();
             }
         }
+        ptest1.textContent=new Date().toISOString().slice(0, 10);
+       // ptest2.textContent=new Date((mins*60+seg)*1000).toISOString().substr(11, 8);
+       var ultimoCronometro = <%== @historial_data.last.to_json %> ;
+        //ptest2.textContent= new Date(ultimoCronometro.fecha_inicio + 'T' + ultimoCronometro.hora_inicio).getTime() - new Date().getTime();
+    hora = new Date(ultimoCronometro.hora_inicio).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+    ptest2.textContent= new Date(ultimoCronometro.fecha_inicio + 'T' + hora ).getTime() - new Date().getTime();
     }
 
+ 
     // cuando la pagina esta completamente cargada,sin errores
     // , se enlazan los botones a sus acciones correspondientes
     document.addEventListener('DOMContentLoaded', function() {

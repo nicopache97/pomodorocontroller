@@ -1,0 +1,36 @@
+
+
+/* Estilo para el input */
+.nombre-crono {
+    overflow-y: visible;
+    position: relative;
+    top: 0;
+    transition: top 0.5s, opacity 0.5s;
+    height: 170px;
+    align-items: center;
+    width: 370px;
+    font-size: 35px;
+    border-radius: 35px 15px;
+    text-align: center;
+    display: block;
+    margin: auto;
+    margin-bottom: 10px;
+    word-wrap: break-word;
+    background-color: #343a40;
+    color: #fff;
+}
+
+.cronometro {
+    opacity: 1;
+    transition: opacity 0.5s;
+}
+
+.nombre-crono.below {
+    top: 1s;
+    opacity: 0.75;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}
