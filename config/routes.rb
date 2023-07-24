@@ -5,14 +5,22 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "pomodoro#index"
-  #get 'pomodoro/index' , to: "pomodoro#index"
-  post '/cronos', to: 'cronos#create'
-  resources :cronos, only: [:create, :update] do
-    member do
-      patch 'actualizar', to: 'cronos#update'
-    end
-    patch 'actualizarUltimo', to: 'cronos#actualizarUltimoCrono', on: :collection
+
+#  post '/cronos', to: 'cronos#create'
+#  resources :cronos, only: [:create, :update] do
+#    member do
+#      patch 'actualizar', to: 'cronos#update'
+#    end
+#    patch 'actualizarUltimo', to: 'cronos#actualizarUltimoCrono', on: :collection
+#  end
+
+resources :cronos, only: [:create, :update] do
+  member do
+    patch 'actualizar', to: 'cronos#update'
+    delete 'borrar', to: 'cronos#borrar_crono'
   end
+  patch 'actualizarUltimo', to: 'cronos#actualizarUltimoCrono', on: :collection
+end
 
 
 end

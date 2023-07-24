@@ -37,6 +37,14 @@ class CronosController < ApplicationController
     end
   end
 
+  def borrar_crono
+    if current_user.nil? || params[:id].nil?
+    else
+      @crono = Crono.find(params[:id])
+      @crono.destroy
+      head :no_content
+    end
+  end
   private
 
   def crono_actualiza_params

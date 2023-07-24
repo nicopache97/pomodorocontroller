@@ -1,13 +1,18 @@
 
 
-/* Estilo para el input */
+.Paleta-Colores {
+    background-color: #C25981;
+    background-color: #8F0A84;
+    background-color: #5D597A;
+    background-color: #51A34B;
+    background-color: #183147;
+    background-color: #C5D1D9;
+    background-color: #275D8C;
+}
+
 .nombre-crono {
-    overflow-y: visible;
-    position: relative;
     top: 0;
     transition: top 0.5s, opacity 0.5s;
-    height: 170px;
-    align-items: center;
     width: 370px;
     font-size: 35px;
     border-radius: 35px 15px;
@@ -16,10 +21,32 @@
     margin: auto;
     margin-bottom: 10px;
     word-wrap: break-word;
-    background-color: #343a40;
-    color: #fff;
+    background-color: #C5D1D9;
+    color: #51A34B;
+}
+.color-fondo{
+    background-color: #C5D1D9;
+}
+.color-fondo2{
+    background-color: #B5CCD9;
+    color: #183147;
 }
 
+.color-acento{
+    background-color: #275D8C;
+}
+.color-btn-primario{
+    background-color: #183147;
+}
+
+.btn-historial{
+    font-size: 20px;
+    background-color: #183147;
+    color: #ffff;
+    left: 135px;
+    right: 135px;
+    bottom: 20px;
+}
 .cronometro {
     opacity: 1;
     transition: opacity 0.5s;

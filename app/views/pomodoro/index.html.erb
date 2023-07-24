@@ -10,11 +10,11 @@
         <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
     </div>
 
-    <div id='space' style='height: 4em;'></div>
+    <div id='space' style='height: 2em;'></div>
 
+    <input id="nombreCrono" type="text" class="justify-content-center nombre-crono" placeholder="¿Qué vamos a estudiar hoy?" >
     <div class="d-flex justify-content-center">
-        <input id="nombreCrono" type="text" class="justify-content-center nombre-crono" placeholder="¿Qué vamos a estudiar hoy?" >
-        <div id="Contenedor-Cronometro" class="d-flex justify-content-center bg-dark text-light col-2 cronometro" style="width: 370px; font-size: 75px; border-radius: 35px 15px;">
+        <div id="CCronometro" class="d-flex justify-content-center bg-dark text-light col-2 cronometro" style="width: 370px; font-size: 75px; border-radius: 35px 15px;">
             <p id="c-horas" class="flex-item p-3">0</p>
             <p id="dosPuntosA" class="flex-item p-2">:</p>
             <p id="c-minutos" class="flex-item p-3">00</p>
@@ -29,9 +29,15 @@
     <div class="d-flex justify-content-center">
         <div class="d-flex">
             <div>
-                <button id="min5" type="button" class="border border-dark btn btn-primary">5min</button>
-                <button id="min15" type="button" class="border border-dark btn btn-primary">15min</button>
-                <button id="min45" type="button" class="border border-dark btn btn-primary">45min</button>
+                <button id="min5" type="button" class="border border-dark btn btn-primary color-btn-primario" >5min</button>
+                <button id="min15" type="button" class="border border-dark btn btn-primary color-btn-primario" >15min</button>
+                <button id="min45" type="button" class="border border-dark btn btn-primary color-btn-primario" >45min</button>
+                <!-- Botón cronometro personalizado -->
+                <button id="minX" class="border border-dark btn btn-primary color-btn-primario"  data-bs-toggle="modal" data-bs-target="#ModalCronometroPersonalizado">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" > 
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12ZM12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4Z" fill="currentColor" /> <path fill-rule="evenodd" clip-rule="evenodd" d="M13 7C13 6.44772 12.5523 6 12 6C11.4477 6 11 6.44772 11 7V11H7C6.44772 11 6 11.4477 6 12C6 12.5523 6.44772 13 7 13H11V17C11 17.5523 11.4477 18 12 18C12.5523 18 13 17.5523 13 17V13H17C17.5523 13 18 12.5523 18 12C18 11.4477 17.5523 11 17 11H13V7Z" fill="currentColor" /> 
+                    </svg>
+                </button>
                 <button id="cancel" type="button" class="btn btn-secondary  border border-dark ">cancel</button>
             </div>
             <div id='space-ancho' style='width: 10em;'></div>
@@ -42,46 +48,122 @@
             </a>
         </div>
     </div >
-    <p id="espacioTester1"></p>
-    <p id="espacioTester2"></p>
+    <!-- boton inferior historial -->
+    <button id='botonHistorial' type="button" class="btn btn-rounded fixed-bottom btn-historial" data-bs-toggle="modal" data-bs-target="#historialModal">
+    <svg width="24" height="24" viewBox="0 0 24 24" > 
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M22.775 8C22.9242 8.65461 23 9.32542 23 10H14V1C14.6746 1 15.3454 1.07584 16 1.22504C16.4923 1.33724 16.9754 1.49094 17.4442 1.68508C18.5361 2.13738 19.5282 2.80031 20.364 3.63604C21.1997 4.47177 21.8626 5.46392 22.3149 6.55585C22.5091 7.02455 22.6628 7.5077 22.775 8ZM20.7082 8C20.6397 7.77018 20.5593 7.54361 20.4672 7.32122C20.1154 6.47194 19.5998 5.70026 18.9497 5.05025C18.2997 4.40024 17.5281 3.88463 16.6788 3.53284C16.4564 3.44073 16.2298 3.36031 16 3.2918V8H20.7082Z" fill="currentColor" /> 
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M1 14C1 9.02944 5.02944 5 10 5C10.6746 5 11.3454 5.07584 12 5.22504V12H18.775C18.9242 12.6546 19 13.3254 19 14C19 18.9706 14.9706 23 10 23C5.02944 23 1 18.9706 1 14ZM16.8035 14H10V7.19648C6.24252 7.19648 3.19648 10.2425 3.19648 14C3.19648 17.7575 6.24252 20.8035 10 20.8035C13.7575 20.8035 16.8035 17.7575 16.8035 14Z" fill="currentColor" /> 
+    </svg>
+    <%= @horasUsadas.to_s + "hs de productividad" %>
+    </button>
 
-    <% if @historial_data.present? %>
-        <div id='space' style='height: 2em;'></div>
-        
+    <!-- Ventana emergente historial de cronometros -->
+    <div class="modal fade" id="historialModal" tabindex="-1" aria-labelledby="historialModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" >
+        <div class="modal-content">
+        <div class="modal-header color-acento" >
         <div class="container d-flex justify-content-center">
-            <div class="row">
-                <div class="col">
-                <div class="contenedor">
-                    <table class="table table-striped">
-                    <thead>
-                        <tr>
-                        <th>Nombre Alarma</th>
-                        <th>Fecha</th>
-                        <th>Hora</th>
-                        <th>Duracion</th>
-                        <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% @historial_data.each do |alarma| %> <!-- itero por todos los elementos del historial -->
-                        <tr>
-                            <td><%= alarma[:nombre] %></td>
-                            <td><%= alarma[:fecha_inicio] %></td>
-                            <td><%= alarma[:hora_inicio].strftime("%I:%M %p") %></td>
-                            <% if alarma[:finalizo].nil? %>
-                                <td>    <% else %>    <td style="color: <%= alarma[:finalizo] ? 'green' : 'red' %>;" > 
+            <h5 class="modal-title text-white" id="historialModalLabel">Historial</h5>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body color-fondo">
+
+        <% if @historial_data.present? %>
+            <div id='space' style='height: 2em;'></div>
+            
+            <div class="container d-flex justify-content-center">
+                <div class="row">
+                    <div class="col">
+                    <div class="contenedor">
+                        <table class="table table-striped">
+                        <thead>
+                            <tr>
+                            <th>Nombre Alarma</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Duracion</th>
+                            <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% @historial_data.each do |alarma| %> <!-- itero por todos los elementos del historial -->
+                            <tr>
+                                <td>
+    <svg width="24" height="24" viewBox="0 0 24 24">
+    <path fill="<%= alarma[:finalizo] ? 'green' : 'red' %>" d="M22.775 8C22.9242 8.65461 23 9.32542 23 10H14V1C14.6746 1 15.3454 1.07584 16 1.22504C16.4923 1.33724 16.9754 1.49094 17.4442 1.68508C18.5361 2.13738 19.5282 2.80031 20.364 3.63604C21.1997 4.47177 21.8626 5.46392 22.3149 6.55585C22.5091 7.02455 22.6628 7.5077 22.775 8ZM20.7082 8C20.6397 7.77018 20.5593 7.54361 20.4672 7.32122C20.1154 6.47194 19.5998 5.70026 18.9497 5.05025C18.2997 4.40024 17.5281 3.88463 16.6788 3.53284C16.4564 3.44073 16.2298 3.36031 16 3.2918V8H20.7082Z" />
+    <path fill="#0F0F0F" d="M1 14C1 9.02944 5.02944 5 10 5C10.6746 5 11.3454 5.07584 12 5.22504V12H18.775C18.9242 12.6546 19 13.3254 19 14C19 18.9706 14.9706 23 10 23C5.02944 23 1 18.9706 1 14ZM16.8035 14H10V7.19648C6.24252 7.19648 3.19648 10.2425 3.19648 14C3.19648 17.7575 6.24252 20.8035 10 20.8035C13.7575 20.8035 16.8035 17.7575 16.8035 14Z" />
+    </svg>
+                                    <%= alarma[:nombre] %></td>
+                                <td><%= alarma[:fecha_inicio] %></td>
+                                <td><%= alarma[:hora_inicio].strftime("%I:%M %p") %></td>
+                                <td style="color: #236F51" > 
+                                        <%= alarma[:duracion].hour.zero? ? alarma[:duracion].strftime("%M:%S") : alarma[:duracion].strftime("%H:%M:%S") %></td>
+                                <td> <button id="eliminar(<%=alarma[:id]%>)" type="button" class="btn btn-dark"> x</button> </td>
+                            </tr>
                             <% end %>
-                                    <%= alarma[:duracion].hour.zero? ? alarma[:duracion].strftime("%M:%S") : alarma[:duracion].strftime("%H:%M:%S") %></td>
-                            <td> <button id="eliminar(<%=alarma[:id]%>)" type="button" class="btn btn-dark"> x<%=alarma[:id]%> </button> </td>
-                        </tr>
-                        <% end %>
-                    </tbody>
-                    </table>
-                </div>
+                        </tbody>
+                        </table>
+                    </div>
+                    </div>
                 </div>
             </div>
+        <%end%>
         </div>
-    <%end%>
+        </div>
+    </div>
+    </div>
+
+
+
+<!-- Modal cronometro personalizado -->
+<div class="modal fade" id="ModalCronometroPersonalizado" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header color-acento" >
+        <div class="container d-flex justify-content-center">
+           <h5 class="modal-title text-white" id="exampleModalLabel"> cuanto tiempo vas a enfocarte ?</h5>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body color-fondo">
+        <div class="row">
+          <div class="col-md-6">
+          <div class="container d-flex justify-content-center">
+            <label for="hours">Horas:</label>
+          </div >
+          <div class="container d-flex">
+            <select id="horasSeleccionadas" class="form-select color-fondo2">
+              <!-- Opciones de 0 a 8 horas -->
+                <% (0..8).each do |value| %>
+                    <option class="text-center " value="<%= value %>"><%= value %></option>
+                <% end %>
+            </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+          <div class="container d-flex justify-content-center">
+            <label for="minutes">Minutos:</label>
+          </div>
+          <div class="container d-flex">
+            <select id="minutosSeleccionados" class="form-select color-fondo2">
+                <% (0..59).each do |value| %>
+                    <option class="text-center" value="<%= value %>"><%= value %></option>
+                <% end %>
+            </select>
+          </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer color-fondo" >
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button id="iniciarContarX" class="btn text-white color-btn-primario">Iniciar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 </div>
 
 <script>
@@ -95,7 +177,7 @@
     }
     var usuarioLogeado = <%= @user_name.present? ? 'true' : 'false' %>;
     var user_name = "<%= @user_name%>";
-    var isrestore= <%= @historial_data.present? ? 'true' : 'false'  %>
+    var hayRegistro= <%= @historial_data.present? ? 'true' : 'false'  %>
 
     var HORAS_INICIAL=0; // valor inicial del contador
     var MINUTOS_INICIAL=0;
@@ -113,23 +195,27 @@
     var pPuntoB=document.getElementById('dosPuntosB');
     var pSegundos=document.getElementById('c-segundos');
     var pNombreCrono=document.getElementById('nombreCrono');
-    var pCrono=document.getElementById('Contenedor-Cronometro');
+    var pCrono=document.getElementById('CCronometro');
+    var bHistorial=document.getElementById('botonHistorial');
+
+    var selectHoras=document.getElementById('horasSeleccionadas');
+    var selectMinutos=document.getElementById('minutosSeleccionados');
 
     var b5min = document.getElementById('min5');    // enlazo los botones disponibles
     var b15min = document.getElementById('min15');
     var b45min = document.getElementById('min45');
+    var bXmin = document.getElementById('minX');
+    var bContarX=document.getElementById('iniciarContarX');
     var bmuted = document.getElementById('boton-mute');
     var bcancel = document.getElementById('cancel');
     var pEspacioAncho=document.getElementById('space-ancho');
-    var ptest1=document.getElementById('espacioTester1');
-    var ptest2=document.getElementById('espacioTester2');
 
     function muestra_botones_contar(){ // funcion mostrar botones que inician el cronometro
         b5min.removeAttribute("hidden");
         b15min.removeAttribute("hidden");
         b45min.removeAttribute("hidden");
-        pNombreCrono.removeAttribute("hidden");
-        pCrono.setAttribute("hidden", true);
+        bXmin.removeAttribute("hidden");
+        pNombreCrono.disabled = false;
         bcancel.setAttribute("hidden", true);
         pEspacioAncho.setAttribute("hidden", true);
         bmuted.setAttribute("hidden", true);
@@ -138,8 +224,8 @@
         b5min.setAttribute("hidden", true);
         b15min.setAttribute("hidden", true);
         b45min.setAttribute("hidden", true);
-        pNombreCrono.setAttribute("hidden", true);
-        pCrono.removeAttribute("hidden");
+        bXmin.setAttribute("hidden", true);
+        pNombreCrono.disabled = true;
         bcancel.removeAttribute("hidden");
         pEspacioAncho.removeAttribute("hidden");
         bmuted.removeAttribute("hidden");
@@ -175,8 +261,6 @@
         pHoras.textContent="-";
         pMinutos.textContent="-";
         pSegundos.textContent="-";
-        pHoras.removeAttribute("hidden");
-        pPuntoA.removeAttribute("hidden");
         actualizarBarra(0);
         muestra_botones_contar();
     }
@@ -209,6 +293,26 @@
     }
 
     /**
+     * Envía una solicitud para borrar un crono mediante una petición Ajax.
+     * @param {number} idCrono - El ID del crono que se desea borrar.
+     */
+    function borrarCrono(idCrono) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('DELETE', '/cronos/' + idCrono + '/borrar');
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.setRequestHeader('X-CSRF-Token', csrfToken);
+        xhr.onload = function() {
+            if (xhr.status === 204) {
+            console.log('Crono borrado exitosamente');
+            } else {
+            console.error('Error al borrar el crono');
+            }
+        };
+        xhr.send();
+    }
+
+
+    /**
      * Función principal para verificar si el cronómetro actual todavía tiene tiempo restante y obtener el tiempo restante.
      * @param {Object[]} ultimoCronometro - el historial de cronómetro de la BD.
      */
@@ -216,7 +320,7 @@
         if (ultimoCronometro) {           
             // Verificar si el cronómetro actual todavía tiene tiempo restante
             if (ultimoCronometro && ultimoCronometro.fecha_inicio && ultimoCronometro.duracion && ultimoCronometro.hora_inicio) {
-                if (quedaTiempoRestante(ultimoCronometro.fecha_inicio, ultimoCronometro.duracion)) {
+                if (quedaTiempoRestante(ultimoCronometro.fecha_inicio, ultimoCronometro.duracion.date())) {
 
                     var horaInicio = ultimoCronometro.hora_inicio;
                     var tiempoRestanteEnMilisegundos = new Date(ultimoCronometro.fecha_inicio + 'T' + ultimoCronometro.hora_inicio).getTime() - new Date().getTime();
@@ -294,7 +398,12 @@
 
 
     var interval2 ; // variable de llamado de funcion
-
+    function iniciarCronometroPersonalizado(){
+        if(selectMinutos.value!=0 || selectHoras.value!=0){
+            iniciarCronometro(selectHoras.value,selectMinutos.value,0,true);
+            cerrarModalSelectorCustom();
+        }
+    }
     function iniciarCronometro5min() {        iniciarCronometro(0,5,0,true);
     }
     function iniciarCronometro15min() {        iniciarCronometro(0,15,0,true);
@@ -312,6 +421,12 @@
         }
     }
 
+    function cerrarModalSelectorCustom() {
+        var modalElement = document.getElementById('ModalCronometroPersonalizado');
+        var modal = bootstrap.Modal.getInstance(modalElement);
+        modal.hide();
+    }
+    
     // cancela la cuenta regresiva
     function cancelar(){
         clearInterval(interval2);
@@ -320,6 +435,7 @@
         if (usuarioLogeado){ // si el usuario esta logueado, manda a cancelar el cronometro
             actualizarUltimoCrono(false, ( (MINUTOS_INICIAL*60+SEGUNDOS_INICIAL)-(mins*60+seg) )*1000);
         }
+        location.reload();
     }
 
     // funcion principal decrementar cronometro
@@ -338,6 +454,9 @@
                     interval2=null;
                     sonar();
                     limpiar();
+                    if (usuarioLogeado){ // si el usuario esta logueado, manda a finalizar el cronometro
+                        actualizarUltimoCrono(true, ( MINUTOS_INICIAL*60+SEGUNDOS_INICIAL)*1000);
+                    }
                 }                
             }
         }
@@ -357,27 +476,43 @@
                 pSegundos.textContent=seg.toString();
             }
         }
-        ptest1.textContent=new Date().toISOString().slice(0, 10);
-       // ptest2.textContent=new Date((mins*60+seg)*1000).toISOString().substr(11, 8);
-       var ultimoCronometro = <%== @historial_data.last.to_json %> ;
-        //ptest2.textContent= new Date(ultimoCronometro.fecha_inicio + 'T' + ultimoCronometro.hora_inicio).getTime() - new Date().getTime();
-    hora = new Date(ultimoCronometro.hora_inicio).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
-    ptest2.textContent= new Date(ultimoCronometro.fecha_inicio + 'T' + hora ).getTime() - new Date().getTime();
     }
 
- 
+    function setBotonesEliminar(){
+        // Buscar todos los botones con ID que comienza con "eliminar(" y termina con ")"
+        const botonesEliminar = document.querySelectorAll('[id^="eliminar("][id$=")"]');
+
+        botonesEliminar.forEach((boton) => { // por cada boton
+            boton.addEventListener('click', function() { // le agrego en el listener click
+                const idCrono = parseInt(boton.id.substring(9, boton.id.length - 1)); 
+                borrarCrono(idCrono); // borrar cronometro asociado a ese registro
+                location.reload();
+            });
+        });
+
+    }
+
     // cuando la pagina esta completamente cargada,sin errores
     // , se enlazan los botones a sus acciones correspondientes
     document.addEventListener('DOMContentLoaded', function() {
         b5min.onclick = iniciarCronometro5min;
         b15min.onclick = iniciarCronometro15min;
         b45min.onclick = iniciarCronometro45min;
+        bContarX.onclick = iniciarCronometroPersonalizado;
         bmuted.onclick= functionMute;
         bcancel.onclick= cancelar;
+
         muestra_botones_contar(); // oculta el boton de cancelar
         limpiar(); // inicializo la limpieza del reloj
         functionMute();
-        restauraCronometro(<%== @historial_data.last.to_json %>); // restauro el ultimo contador valido, si existe
+        if (hayRegistro){
+            restauraCronometro(<%== @historial_data.try(:last).to_json %>); // restauro el ultimo contador valido
+            setBotonesEliminar(); // conecto los botones del registro con la accion de eliminar
+        }else{
+            bHistorial.disabled=true;
+            bHistorial.textContent="iniciar sesion para habilitar mas opciones";
+        }
+
     });
 
 </script>
