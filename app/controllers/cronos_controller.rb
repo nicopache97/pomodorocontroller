@@ -18,6 +18,12 @@ class CronosController < ApplicationController
     else
         @crono = current_user.cronos.last
       if @crono.update(crono_actualiza_params)
+        @crono.duracion
+        total_segundos = 3600 * @crono.duracion.hour
+        total_segundos += 60 * @crono.duracion.min
+        total_segundos += @crono.duracion.sec
+        current_user.uso_total+=total_segundos
+        current_user.save
         render json: { status: 'success', message: 'Crono actualizado exitosamente' }
       else
         render json: { status: 'error', message: @crono.errors.full_messages.join(', ') }
@@ -30,6 +36,12 @@ class CronosController < ApplicationController
     else
         @crono = Crono.find(params[:id])
       if @crono.update(crono_actualiza_params)
+        @crono.duracion
+        total_segundos = 3600 * @crono.duracion.hour
+        total_segundos += 60 * @crono.duracion.min
+        total_segundos += @crono.duracion.sec
+        current_user.uso_total+=total_segundos
+        current_user.save
         render json: { status: 'success', message: 'Crono actualizado exitosamente' }
       else
         render json: { status: 'error', message: @crono.errors.full_messages.join(', ') }

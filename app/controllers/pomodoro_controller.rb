@@ -5,7 +5,7 @@ class PomodoroController < ApplicationController
     if current_user.present?
       @historial_data = current_user.cronos.order(id: :desc)
       @user_name =current_user.nombre;
-      @horasUsadas=(1.1812319).round(1);
+      @horasUsadas=((current_user.uso_total)/3600).round(1); 
     end
     
     #cookies[:user_id] = {
