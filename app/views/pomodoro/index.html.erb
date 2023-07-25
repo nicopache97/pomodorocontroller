@@ -2,7 +2,7 @@
 
 <%= stylesheet_link_tag 'cronos', 'data-turbolinks-track': 'reload' %> 
 
-<div class="container-fluid top-0 bottom-0 left-0 right-0">
+<div >
 
     <%= render template: "layouts/navbar"%>
     
@@ -14,7 +14,7 @@
 
     <input id="nombreCrono" type="text" class="justify-content-center nombre-crono" placeholder="¿Qué vamos a estudiar hoy?" >
     <div class="d-flex justify-content-center">
-        <div id="CCronometro" class="d-flex justify-content-center bg-dark text-light col-2 cronometro" style="width: 370px; font-size: 75px; border-radius: 35px 15px;">
+        <div id="CCronometro" class="d-flex justify-content-center bg-dark text-light col-2 cronometro" style="width: 380px; font-size: 75px; border-radius: 35px 15px;">
             <p id="c-horas" class="flex-item p-3">0</p>
             <p id="dosPuntosA" class="flex-item p-2">:</p>
             <p id="c-minutos" class="flex-item p-3">00</p>
@@ -99,7 +99,7 @@
                                 <td><%= alarma[:hora_inicio].strftime("%I:%M %p") %></td>
                                 <td style="color: #236F51" > 
                                         <%= alarma[:duracion].hour.zero? ? alarma[:duracion].strftime("%M:%S") : alarma[:duracion].strftime("%H:%M:%S") %></td>
-                                <td> <button id="eliminar(<%=alarma[:id]%>)" type="button" class="btn btn-dark"> x</button> </td>
+                                <td> <button id="eliminar(<%=alarma[:id]%>)" type="button" class="btn btn-dark"> x<%=alarma[:id]%></button> </td>
                             </tr>
                             <% end %>
                         </tbody>
@@ -177,7 +177,7 @@
     }
     var usuarioLogeado = <%= @user_name.present? ? 'true' : 'false' %>;
     var user_name = "<%= @user_name%>";
-    var hayRegistro= <%= @historial_data.present? ? 'true' : 'false'  %>
+    var hayRegistro= <%= @historial_data.present? ? 'true' : 'false'  %> ;
 
     var HORAS_INICIAL=0; // valor inicial del contador
     var MINUTOS_INICIAL=0;
@@ -216,6 +216,7 @@
         b45min.removeAttribute("hidden");
         bXmin.removeAttribute("hidden");
         pNombreCrono.disabled = false;
+        pNombreCrono.value='';
         bcancel.setAttribute("hidden", true);
         pEspacioAncho.setAttribute("hidden", true);
         bmuted.setAttribute("hidden", true);
@@ -226,6 +227,14 @@
         b45min.setAttribute("hidden", true);
         bXmin.setAttribute("hidden", true);
         pNombreCrono.disabled = true;
+        if(pNombreCrono.value==''){
+            pNombreCrono.value= (HORAS_INICIAL==0)? 'Enfocado '+MINUTOS_INICIAL+' minutos'
+                     : 'Enfocado '+ HORAS_INICIAL+':'+MINUTOS_INICIAL+' horas';
+        }
+        if(HORAS_INICIAL==0){
+            pHoras.setAttribute("hidden", true);
+            pPuntoA.setAttribute("hidden", true);
+        }
         bcancel.removeAttribute("hidden");
         pEspacioAncho.removeAttribute("hidden");
         bmuted.removeAttribute("hidden");
@@ -274,10 +283,6 @@
     }
     function inicializaReloj(hh,mm,ss){
         setReloj(hh,mm,ss,hh,mm,ss);
-        if(hh==0){
-            pHoras.setAttribute("hidden", true);
-            pPuntoA.setAttribute("hidden", true);
-        }
     }
     /**
      * Verifica si el cronómetro actual todavía tiene tiempo restante.
@@ -506,9 +511,9 @@
         muestra_botones_contar(); // oculta el boton de cancelar
         limpiar(); // inicializo la limpieza del reloj
         functionMute();
+        setBotonesEliminar(); // conecto los botones del registro con la accion de eliminar
         if (hayRegistro){
             restauraCronometro(<%== @historial_data.try(:last).to_json %>); // restauro el ultimo contador valido
-            setBotonesEliminar(); // conecto los botones del registro con la accion de eliminar
         }else{
             bHistorial.disabled=true;
             bHistorial.textContent="iniciar sesion para habilitar mas opciones";
