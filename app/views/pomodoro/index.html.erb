@@ -6,8 +6,8 @@
 
     <%= render template: "layouts/navbar"%>
     
-    <div class="progress">
-        <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+    <div class="progress color-fondo2" >
+        <div class="progress-bar color-btn-primario" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
     </div>
 
     <div id='space' style='height: 2em;'></div>
@@ -99,7 +99,7 @@
                                 <td><%= alarma[:hora_inicio].strftime("%I:%M %p") %></td>
                                 <td style="color: #236F51" > 
                                         <%= alarma[:duracion].hour.zero? ? alarma[:duracion].strftime("%M:%S") : alarma[:duracion].strftime("%H:%M:%S") %></td>
-                                <td> <button id="eliminar(<%=alarma[:id]%>)" type="button" class="btn btn-dark"> x<%=alarma[:id]%></button> </td>
+                                <td> <button id="eliminar(<%=alarma[:id]%>)" type="button" class="btn btn-dark"> x</button> </td>
                             </tr>
                             <% end %>
                         </tbody>
@@ -462,6 +462,7 @@
                     limpiar();
                     if (usuarioLogeado){ // si el usuario esta logueado, manda a finalizar el cronometro
                         actualizarUltimoCrono(true, ( MINUTOS_INICIAL*60+SEGUNDOS_INICIAL)*1000);
+                        location.reload();
                     }
                 }                
             }
@@ -500,7 +501,7 @@
 
     // cuando la pagina esta completamente cargada,sin errores
     // , se enlazan los botones a sus acciones correspondientes
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('turbo:load', function() {
         b5min.onclick = iniciarCronometro5min;
         b15min.onclick = iniciarCronometro15min;
         b45min.onclick = iniciarCronometro45min;
@@ -512,7 +513,7 @@
         limpiar(); // inicializo la limpieza del reloj
         functionMute();
         setBotonesEliminar(); // conecto los botones del registro con la accion de eliminar
-        if (hayRegistro){
+        if (usuarioLogeado){
             restauraCronometro(<%== @historial_data.try(:last).to_json %>); // restauro el ultimo contador valido
         }else{
             bHistorial.disabled=true;

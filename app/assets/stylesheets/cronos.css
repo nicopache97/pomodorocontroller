@@ -51,9 +51,9 @@
     font-size: 20px;
     background-color: #183147;
     color: #ffff;
-    left: 135px;
-    right: 135px;
-    bottom: 20px;
+    left: 3em;
+    right: 3em;
+    bottom: 1em;
 }
 .cronometro {
     opacity: 1;
@@ -65,7 +65,3 @@
     opacity: 0.75;
 }
 
-.container {
-    display: flex;
-    justify-content: center;
-}
