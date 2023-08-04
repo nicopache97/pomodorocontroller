@@ -12,10 +12,10 @@ RUN apt-get update -y && apt-get upgrade -y
 RUN apt-get install -y ruby ruby-dev zlib1g-dev libsqlite3-dev build-essential patch ruby-tzinfo ruby-dev libcurl4-openssl-dev libssl-dev make gcc g++
 
 # Instala Node.js y Yarn para la ejecución de assets en Rails 7
-RUN apt-get install -y nodejs yarn
+#RUN apt-get install -y nodejs yarn
 
 # Instalar Node.js y npm
-RUN apt-get install -y nodejs npm
+#RUN apt-get install -y nodejs npm
 
 # Instala Rails
 RUN gem install rails -v '7.0.4.2'
