@@ -1,5 +1,30 @@
 # app/controllers/cronos_controller.rb
 class CronosController < ApplicationController
+  respond_to :html
+
+  def index
+
+    if current_user.present?
+      @historial_data = current_user.cronos.order(id: :desc)
+      @user_name =current_user.nombre;
+      @horasUsadas=((current_user.uso_total)/3600).round(1); 
+    end
+    
+    #cookies[:user_id] = {
+    #  value: current_user.id,
+    #  expires: 1.day.from_now,
+    #  secure: Rails.env.production?
+    #}
+
+    if request.variant.include?(:turbo_stream)
+      redirect_to root_path(format: :html)
+    else
+      respond_to do |format|
+        format.html # Responde en formato HTML
+      end
+    end
+  end
+
   def create
     if current_user.nil?
     else
