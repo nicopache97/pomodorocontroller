@@ -1,6 +1,7 @@
 # app/controllers/cronos_controller.rb
 class CronosController < ApplicationController
   respond_to :html
+  before_action :authenticate_user!, except: [:index, :about]
 
   def index
 
@@ -16,13 +17,6 @@ class CronosController < ApplicationController
     #  secure: Rails.env.production?
     #}
 
-    if request.variant.include?(:turbo_stream)
-      redirect_to root_path(format: :html)
-    else
-      respond_to do |format|
-        format.html # Responde en formato HTML
-      end
-    end
   end
 
   def create
@@ -39,49 +33,45 @@ class CronosController < ApplicationController
   end
 
   def actualizarUltimoCrono
-    if current_user.nil? 
+    @crono = current_user.cronos.last
+    if @crono.update(crono_actualiza_params)
+      @crono.duracion
+      total_segundos = 3600 * @crono.duracion.hour
+      total_segundos += 60 * @crono.duracion.min
+      total_segundos += @crono.duracion.sec
+      current_user.uso_total+=total_segundos
+      current_user.save
+      render json: { status: 'success', message: 'Crono actualizado exitosamente' }
     else
-        @crono = current_user.cronos.last
-      if @crono.update(crono_actualiza_params)
-        @crono.duracion
-        total_segundos = 3600 * @crono.duracion.hour
-        total_segundos += 60 * @crono.duracion.min
-        total_segundos += @crono.duracion.sec
-        current_user.uso_total+=total_segundos
-        current_user.save
-        render json: { status: 'success', message: 'Crono actualizado exitosamente' }
-      else
-        render json: { status: 'error', message: @crono.errors.full_messages.join(', ') }
-      end
+      render json: { status: 'error', message: @crono.errors.full_messages.join(', ') }
     end
   end
 
   def update
-    if current_user.nil? || params[:id].nil?
+    @crono = Crono.find(params[:id])
+    if @crono.update(crono_actualiza_params)
+      @crono.duracion
+      total_segundos = 3600 * @crono.duracion.hour
+      total_segundos += 60 * @crono.duracion.min
+      total_segundos += @crono.duracion.sec
+      current_user.uso_total+=total_segundos
+      current_user.save
+      render json: { status: 'success', message: 'Crono actualizado exitosamente' }
     else
-        @crono = Crono.find(params[:id])
-      if @crono.update(crono_actualiza_params)
-        @crono.duracion
-        total_segundos = 3600 * @crono.duracion.hour
-        total_segundos += 60 * @crono.duracion.min
-        total_segundos += @crono.duracion.sec
-        current_user.uso_total+=total_segundos
-        current_user.save
-        render json: { status: 'success', message: 'Crono actualizado exitosamente' }
-      else
-        render json: { status: 'error', message: @crono.errors.full_messages.join(', ') }
-      end
+      render json: { status: 'error', message: @crono.errors.full_messages.join(', ') }
     end
   end
 
   def borrar_crono
-    if current_user.nil? || params[:id].nil?
+    if params[:id].nil?
     else
       @crono = Crono.find(params[:id])
       @crono.destroy
       head :no_content
     end
   end
+
+  
   private
 
   def crono_actualiza_params
