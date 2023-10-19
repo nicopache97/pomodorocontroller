@@ -20,7 +20,7 @@ module Pomodoro
     config.hosts = [
       IPAddr.new("0.0.0.0/0"),        # All IPv4 addresses.
       IPAddr.new("::/0"),             # All IPv6 addresses.
-      "localhost",                    # The localhost reserved domain.
+      "pomodorocontroller-nico2023.2.us-1.fl0.io",
       ENV["RAILS_DEVELOPMENT_HOSTS"]  # Additional comma-separated hosts for development.
     ]
     # config.eager_load_paths << Rails.root.join("extras")
